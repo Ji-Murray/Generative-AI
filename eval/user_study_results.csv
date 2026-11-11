@@ -1,0 +1,11 @@
+participant_id,mode,question_type,question,resolved,viewed_citation,adopted_answer,wanted_external,usefulness,trust,satisfaction,source_attr_correct,source_confusion,preferred_mode,notes
+P1,lecture_only,covered,, , , , , , , ,NA,0,,
+P1,lecture_only,partial,, , , , , , , ,NA,0,,
+P1,lecture_only,uncovered,, , , , , , , ,NA,0,,
+P1,lecture_only,cross,, , , , , , , ,NA,0,,
+P1,lecture_only,own,, , , , , , , ,NA,0,,
+P1,lecture_plus_web,covered,, , , , , , , , , , ,
+P1,lecture_plus_web,partial,, , , , , , , , , , ,
+P1,lecture_plus_web,uncovered,, , , , , , , , , , ,
+P1,lecture_plus_web,cross,, , , , , , , , , , ,
+P1,lecture_plus_web,own,, , , , , , , , , , ,

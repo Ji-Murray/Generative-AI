@@ -1,0 +1,38 @@
+# Cursor 项目规则：LectureQA
+
+## 项目目标
+
+构建 DSC6021 Generative AI Product 路线课程项目：课程讲义 RAG 助手，支持逐页引用、证据不足拒答、Quiz 生成与可复现评估。
+技术栈：Python 3.11+、uv、PyMuPDF、ChromaDB、OpenAI-compatible SDK、FastAPI、Streamlit。
+
+## 开始前必须阅读
+
+1. `docs/SPEC.md`：模块边界、数据契约、引用与拒答协议。
+2. `docs/EVALUATION.md`：指标与标注规范。
+3. 本轮关联的 `prompts/0N_*.md`：范围与验收命令。
+
+## 不可违反的约束
+
+- 模块间只传 `src/lectureqa/schemas.py` 定义的数据模型，不传裸 dict（JSON 解析边界除外）。
+- `Chunk` 不得跨页；chunk_id 为 `{doc_id}:p{page}:c{idx}`，页码 1-based。
+- 所有配置从 `config.py` 的 `Settings` 读取；不在业务代码硬编码 API Key、路径或模型名。
+- `var/`、`.env`、虚拟环境、评估报告都不能提交；课程 PDF 只在获授权时保留。
+- 所有 LLM 调用只能经 `llm.py`；提示词只能放 `generation/prompts.py`。
+- 生成答案引用必须经过实际证据页集合校验；无效引用剔除并记录，严禁相信模型自报出处。
+- 证据不足先拒答，不得让模型基于常识补齐。
+- Quiz 每道题必须通过类型、答案格式、出处命中校验；失败题进入 `dropped`。
+- 网络服务、模型、向量库都要可替换；单测使用 FakeLLM + hash embedding + local store，不依赖外网。
+- 用户可见文案优先中文；模型生成跟随问题语言。
+
+## 工程要求
+
+- 先阅读现有代码再改动，不推倒重写已有模块。
+- 每次改动尽可能小，避免无关重构；新增逻辑配相应测试。
+- 错误要带上下文且可观察；不要 `except Exception: pass` 静默吞错。
+- 改完运行相关测试；有条件时跑 `python -m pytest -q` 与 `ruff check .`。
+- 不新增仅复述代码行为的注释；注释只解释非显然的意图/约束。
+- 不自行更改技术选型、数据契约或公开 API；如需变更先更新 SPEC 与测试。
+
+## 交付格式
+
+完成一个里程碑后：总结改动、列出运行/测试命令与结果、说明未覆盖项；不要只说“完成”。

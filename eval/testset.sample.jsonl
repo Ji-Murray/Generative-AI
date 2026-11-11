@@ -1,0 +1,6 @@
+{"qid": "q001", "question": "这门课程的总评成绩由哪几部分构成，各占多少比例？", "type": "answerable", "gold_doc_ids": ["lecture01_course_overview"], "gold_pages": [1], "reference_answer": "项目（Product）40%，技术论文 20%，平时作业 40%。", "notes": "单页事实题"}
+{"qid": "q002", "question": "缩放点积注意力里的 sqrt(d_k) 起什么作用？", "type": "answerable", "gold_doc_ids": ["lecture02_transformer"], "gold_pages": [2], "reference_answer": "防止点积随维度增大导致方差过大、softmax 梯度消失。", "notes": "解释型问题"}
+{"qid": "q003", "question": "RAG 分块时推荐的 chunk 大小和 overlap 分别是多少？", "type": "answerable", "gold_doc_ids": ["lecture03_retrieval_augmented_generation"], "gold_pages": [2], "reference_answer": "chunk 大小 512 tokens，重叠 64 tokens。", "notes": "数字抽取"}
+{"qid": "q004", "question": "课程是否允许用 Moonshot 模型替代 Claude 完成作业？", "type": "unanswerable", "gold_doc_ids": [], "gold_pages": [], "reference_answer": "", "notes": "不可回答：讲义未提及"}
+{"qid": "q005", "question": "多头注意力默认使用多少个注意力头？", "type": "answerable", "gold_doc_ids": ["lecture02_transformer"], "gold_pages": [3], "reference_answer": "默认 h = 8 个头。", "notes": "跨页干扰（第 2 页也提到注意力）"}
+{"qid": "q006", "question": "RAG 的生成侧用哪些指标评估？", "type": "answerable", "gold_doc_ids": ["lecture03_retrieval_augmented_generation"], "gold_pages": [4], "reference_answer": "引用精度（citation precision）与证据支持率，并单独评估拒答能力。", "notes": "多要点"}

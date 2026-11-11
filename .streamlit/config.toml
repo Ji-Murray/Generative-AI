@@ -1,0 +1,11 @@
+[theme]
+base = "light"
+primaryColor = "#c65b3d"
+backgroundColor = "#f4f5f3"
+secondaryBackgroundColor = "#e9eee8"
+textColor = "#172033"
+font = "sans serif"
+
+[server]
+# 与后端 MAX_UPLOAD_MB 对齐，避免前端允许 200MB、后端却拒绝
+maxUploadSize = 30
