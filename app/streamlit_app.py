@@ -62,13 +62,27 @@ h2 { font-size: 1.35rem !important; margin: 1.5rem 0 .75rem !important; }
 h3 { font-size: 1.06rem !important; }
 p, li { color: var(--ink); line-height: 1.65; }
 [data-testid="stCaptionContainer"] p { color: var(--muted); font-size: .82rem; }
-[data-testid="stSidebar"] { background: #202a2d; border-right: 1px solid #344044; }
+[data-testid="stSidebar"] { background: #202a2d; border-right: 1px solid #344044; min-width: 17rem !important; max-width: 17rem !important; }
+@media (max-width: 700px) { [data-testid="stSidebar"] { min-width: min(17rem, 88vw) !important; max-width: min(17rem, 88vw) !important; } }
 [data-testid="stSidebar"] * { color: #e8ece9 !important; }
 [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p { color: #aebbb6 !important; }
 [data-testid="stSidebar"] hr { border-color: rgba(255,255,255,.12); }
 [data-testid="stSidebar"] [data-baseweb="select"] > div, [data-testid="stSidebar"] [data-baseweb="base-input"] { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.14); }
 [data-testid="stSidebar"] .stButton > button { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.15); color: #edf1ee; }
 [data-testid="stSidebar"] .stButton > button[kind="primary"] { background: var(--accent) !important; border: 0 !important; }
+[data-testid="stSidebar"] .st-key-sidebar_navigation button { min-height: 2.25rem; justify-content: flex-start; gap: .65rem; padding-inline: .75rem; border: 0; border-radius: 6px; background: transparent; color: #bdc8c4; font-size: .86rem; font-weight: 500; text-align: left; }
+[data-testid="stSidebar"] .st-key-sidebar_navigation button:hover { background: rgba(255,255,255,.07); color: #fff; border: 0; }
+[data-testid="stSidebar"] .st-key-sidebar_navigation button svg { width: 1rem; height: 1rem; color: #95a39e; }
+[data-testid="stSidebar"] .st-key-sidebar_navigation button[kind="primary"] { background: rgba(198,91,61,.16) !important; box-shadow: inset 3px 0 0 var(--accent); color:#fff !important; }
+[data-testid="stSidebar"] .st-key-sidebar_navigation button[kind="primary"] svg { color:#e6a08e; }
+[data-testid="stSidebar"] .st-key-sidebar_navigation { gap: .25rem !important; }
+[data-testid="stSidebar"] .st-key-sidebar_navigation button > div { width: 100%; justify-content: flex-start; }
+[data-testid="stSidebar"] .st-key-sidebar_navigation button [data-has-shortcut] { justify-content: flex-start; }
+[data-testid="stSidebar"] .st-key-sidebar_navigation button p { font-size: .86rem; line-height: 1.4; font-weight: 500; }
+[data-testid="stSidebar"] .st-key-sidebar_navigation button[kind="secondary"] { background: transparent !important; border: 0 !important; color: #bdc8c4 !important; }
+[data-testid="stSidebar"] .st-key-sidebar_navigation button[kind="secondary"]:hover { background: rgba(255,255,255,.075) !important; }
+[data-testid="stSidebar"] hr { margin: .8rem 0 .4rem; }
+[data-testid="stSidebar"] [data-testid="stSidebarUserContent"] { padding-top: 1rem; }
 [data-testid="stSidebar"] [data-baseweb="radio"] > div { gap: .25rem; }
 [data-testid="stSidebar"] [data-baseweb="radio"] label { min-height: 2.15rem; padding: .35rem .6rem; border-radius: 6px; font-size: .88rem; font-weight: 500; color: #bdc8c4 !important; }
 [data-testid="stSidebar"] [data-baseweb="radio"] label:hover { background: rgba(255,255,255,.06); color: #f3f5f3 !important; }
@@ -894,19 +908,31 @@ def sidebar(service: LectureQAService) -> tuple[list[str] | None, int, bool]:
     settings = service.settings
     with st.sidebar:
         st.markdown(
-            '<div style="padding:.35rem .15rem 1rem">'
-            '<div style="font-weight:700;font-size:1.25rem;letter-spacing:-.04em;color:#f3f4f1">LectureQA</div>'
-            '<div style="font-size:.64rem;color:#91a19b;letter-spacing:.13em;margin-top:.18rem">SOURCE-AWARE LEARNING</div>'
+            '<div style="padding:.1rem .65rem .8rem">'
+            '<div style="font-weight:700;font-size:1.1rem;color:#f3f4f1">LectureQA</div>'
+            '<div style="font-size:.72rem;color:#91a19b;margin-top:.2rem">课程学习工作台</div>'
             '</div>',
             unsafe_allow_html=True,
         )
-        st.radio(
-            "导航",
-            options=list(PAGES),
-            format_func=lambda key: PAGES[key],
-            key="nav",
-            label_visibility="collapsed",
-        )
+        nav_labels = {
+            "home": "课程首页", "lecture": "讲义学习", "quiz": "练习与错题",
+            "chat": "全课程问答", "dev": "课程管理",
+        }
+        nav_icons = {
+            "home": ":material/grid_view:", "lecture": ":material/menu_book:",
+            "quiz": ":material/edit_note:", "chat": ":material/chat_bubble_outline:",
+            "dev": ":material/folder_open:",
+        }
+        current_page = st.session_state.get("nav", "home")
+        with st.container(key="sidebar_navigation"):
+            for page_key, label in nav_labels.items():
+                with st.container(key=f"nav_{'active' if page_key == current_page else 'idle'}_{page_key}"):
+                    st.button(
+                        label, icon=nav_icons[page_key], key=f"navigate_{page_key}",
+                        type="primary" if page_key == current_page else "secondary",
+                        use_container_width=True, on_click=st.session_state.update,
+                        kwargs={"nav": page_key},
+                    )
         st.divider()
 
         with st.expander("课程管理", expanded=not service.indexed):
