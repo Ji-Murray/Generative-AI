@@ -289,7 +289,7 @@ class QuizGenerator:
             )
 
         messages = [
-            {"role": "system", "content": prompts.QUIZ_SYSTEM},
+            {"role": "system", "content": prompts.quiz_system_prompt(self.settings.default_language)},
             {
                 "role": "user",
                 "content": prompts.QUIZ_USER.format(

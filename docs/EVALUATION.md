@@ -46,8 +46,8 @@
 生成侧：
 
 - `citation_precision` = 引用中页码落在 gold 的比例（衡量引用是否指向正确位置）
-- `grounded_rate` = 至少含一条有效引用的答案比例
-- `judge_score` = `(faithful + correct) / 2`，由 `EVAL_JUDGE_MODEL` 打分（0/1 各半）
+- `grounded_rate` = 至少含一条通过证据页校验的有效引用的答案比例；它不等同于答案中每个论断都完成语义级事实核验
+- `judge_score` = `(faithful + correct) / 2`，由 `EVAL_JUDGE_MODEL` 打分（0/1 各半）；当前没有无引用约束对照组，因此不能仅凭该分数判断引用约束是否带来质量代价
 
 拒答侧：
 

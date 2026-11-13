@@ -1,11 +1,28 @@
-participant_id,mode,question_type,question,resolved,viewed_citation,adopted_answer,wanted_external,usefulness,trust,satisfaction,source_attr_correct,source_confusion,preferred_mode,notes
-P1,lecture_only,covered,, , , , , , , ,NA,0,,
-P1,lecture_only,partial,, , , , , , , ,NA,0,,
-P1,lecture_only,uncovered,, , , , , , , ,NA,0,,
-P1,lecture_only,cross,, , , , , , , ,NA,0,,
-P1,lecture_only,own,, , , , , , , ,NA,0,,
-P1,lecture_plus_web,covered,, , , , , , , , , , ,
-P1,lecture_plus_web,partial,, , , , , , , , , , ,
-P1,lecture_plus_web,uncovered,, , , , , , , , , , ,
-P1,lecture_plus_web,cross,, , , , , , , , , , ,
-P1,lecture_plus_web,own,, , , , , , , , , , ,
+participant_id,mode,question_type,question,resolved,viewed_citation,adopted_answer,wanted_external,usefulness,trust,satisfaction,source_attr_correct,source_confusion,preferred_mode,notes,simulated
+P01,course_only,factual,LSTM 是如何缓解梯度消失问题的？,yes,no,yes,no,5,4,4,yes,no,course_only,约20秒答完，p.18/p.19 与 LSTM 章节区间对得上，直接采纳未点开原文,ai_simulated
+P01,course_only,conceptual,Transformer 的自注意力机制相比 RNN 解决了什么问题？,yes,no,partial,no,4,3,4,partial,yes,course_only,四处出处里 p.56 超出第1讲24页且未标明属于哪一讲，只能靠页数猜,ai_simulated
+P01,course_plus_web,factual,N-gram 模型的数据稀疏性问题怎么解决？,yes,no,yes,no,4,4,4,yes,no,course_only,切到“课程材料+网络补充”后回答与纯材料模式无差别，体感开关无效,ai_simulated
+P01,course_only,comparison,统计语言模型和神经网络语言模型有什么区别？,yes,yes,yes,no,5,4,4,yes,no,course_only,点 p.11 / p.14 跳转准确，两个时代的对比讲得清楚,ai_simulated
+P02,course_only,out_of_scope,Diffusion 模型的去噪过程是怎么工作的？,no,no,no,yes,2,5,3,n/a,no,course_plus_web,拒答很诚实不编造，但没有给出替代路径，只能自己再去搜,ai_simulated
+P02,course_plus_web,out_of_scope,这门课有没有讲 Stable Diffusion？,no,no,no,yes,1,5,2,n/a,no,course_plus_web,已勾选“课程材料+网络补充”仍直接拒答，环境配置里显示“网络补充 off”，模式形同虚设,ai_simulated
+P02,course_only,conceptual,什么是词嵌入？为什么语义相近的词距离更近？,yes,yes,yes,no,5,4,4,yes,no,course_only,点 p.14 定位准确，看到原文后放心采纳,ai_simulated
+P02,course_plus_web,conceptual,BERT 是双向的，它和 GPT 的训练目标有什么不同？,yes,no,partial,yes,3,3,3,partial,yes,course_plus_web,课程只在 p.23 提了 BERT 一句，与 GPT 的对比材料里没有，答案偏薄但未编造,ai_simulated
+P02,course_only,factual,Transformer 的编码器和解码器各由什么组成？,yes,yes,yes,no,5,4,4,yes,no,course_only,出处集中在第1讲后段，页码与讲义脉络区间一致,ai_simulated
+P03,course_only,cross_lecture,自注意力为什么能并行训练？和 RNN 的串行有什么本质区别？,yes,yes,partial,no,4,3,3,partial,yes,course_only,同一问题连问两次，引用集合不一致：一次含 p.22，一次只剩 p.17/21/56，可复现性差,ai_simulated
+P03,course_only,comparison,RNN 和 Transformer 在长程依赖上的差别是什么？,yes,yes,yes,no,5,4,4,yes,no,course_only,答案结构清晰，引用 p.17 与 p.21 均落在对应知识点,ai_simulated
+P03,course_plus_web,cross_lecture,课程里 Agent 和 Harness 的关系是怎么讲的？,yes,yes,yes,no,4,4,4,partial,yes,course_plus_web,跨讲跳转页码本身准确，但右侧面板标题只显示 Presentation，看不出跳到了哪一讲,ai_simulated
+P03,course_only,out_of_scope,这门课有没有讲 MCP 协议？,no,no,no,yes,2,5,3,n/a,yes,course_plus_web,拒答后右侧面板自动跳到 Harness Engineering 第5页，与该问题无关，容易被误当成依据,ai_simulated
+P03,course_only,cross_lecture,Harness Engineering 说的环境设计具体包含哪些要素？,yes,yes,yes,no,5,5,4,yes,no,course_only,第4讲定位准确，出处页码区间与讲义脉络对得上,ai_simulated
+P04,course_only,self_test,生成5道自测题（马尔可夫假设 / N-gram / 词嵌入）,yes,no,yes,no,4,4,4,yes,no,course_only,题干贴合讲义正文，不发散；但第5题数学公式渲染成乱码，几乎无法作答,ai_simulated
+P04,course_only,self_test,再生成一次同一主题的5道题,no,no,partial,no,3,3,3,partial,no,course_only,两次生成的题目完全不同，且有两题重复考 Bigram 定义，覆盖度不稳定,ai_simulated
+P04,course_only,factual,Bigram 的概率表达形式是什么？,yes,yes,yes,no,4,4,4,yes,no,course_only,问答侧回答准确，与自测题里同一知识点结论一致,ai_simulated
+P04,course_only,self_test,错题本与薄弱知识点复盘,no,no,no,no,3,3,3,n/a,no,course_only,作答后页面状态被重置、题目丢失，无法进入错题本继续复盘,ai_simulated
+P05,course_only,cross_lecture,Transformer 相比 RNN 解决了什么问题（全课程范围）,yes,yes,no,no,3,2,2,partial,yes,course_only,作为助教逐条核原文：4个出处中 p.56 属第2讲，界面未标注讲义，面板标题仍为 Presentation，无法断言归属正确,ai_simulated
+P05,course_only,cross_lecture,同样的问题但限定第1讲范围,yes,yes,yes,no,5,5,4,yes,no,course_only,限定讲义后引用全部落在24页内，归属清晰，可信度明显提升,ai_simulated
+P05,course_plus_web,out_of_scope,LSTM 之后的 Mamba / SSM 这门课有讲吗？,no,no,no,yes,2,4,2,n/a,no,course_plus_web,再次直接拒答；网络补充开关在当前部署下不生效,ai_simulated
+P05,course_only,factual,LSTM 的三个门分别是什么？各起什么作用？,yes,yes,yes,no,5,5,4,yes,no,course_only,出处 p.19 与答案逐条对应，核对后确认无误,ai_simulated
+P06,course_only,factual,语言模型的定义是什么？,yes,no,yes,no,4,4,4,yes,no,course_only,功能可用，但侧边栏导航文字是浅灰配浅底，几乎看不见，只能靠位置记忆点击,ai_simulated
+P06,course_only,conceptual,马尔可夫假设带来了什么问题？,yes,no,partial,no,3,3,3,yes,no,course_only,等待答案的20多秒里没有明确进度提示，一度以为页面卡死而刷新,ai_simulated
+P06,course_plus_web,factual,什么是自注意力机制？,yes,yes,yes,no,4,4,4,yes,no,course_only,切换回答来源后界面没有任何生效提示，用户无法确认当前处于哪个模式,ai_simulated
+P06,course_only,out_of_scope,这门课会讲模型量化和部署吗？,no,no,no,yes,2,4,2,n/a,no,course_plus_web,拒答本身合理，但想了解课程边界时缺少“课程目录式”的替代回答,ai_simulated
+P06,course_only,cross_lecture,上下文学习 ICL 和提示工程是什么关系？,yes,no,yes,no,4,4,4,yes,no,course_only,落在第2讲，页码准确；用户未点开原文，凭答案自洽程度判断可信,ai_simulated

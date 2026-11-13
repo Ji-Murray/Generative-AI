@@ -1,0 +1,299 @@
+﻿run_id,observed_at_hkt,site_url,test_actor,mode,question_type,question,selected_mode_visible,completed,response_kind,automated_wait_seconds,citation_pages_visible,citation_count_visible,external_source_block_visible,external_links_in_answer,answer_text,resolved,viewed_citation,adopted_answer,wanted_external,usefulness,trust,satisfaction,source_attr_correct,source_confusion,preferred_mode,notes
+AUTO-20261113-01,2026-11-13 16:48:53 HKT,https://generative-ai-edb2vsczy5zdjprebcdn8p.streamlit.app/,automated_browser,lecture_only,covered,"什么是上下文学习（In-Context Learning, ICL）？它和参数更新有什么区别？",仅课程材料,1,answer,56.5,56;55;58;57,4,0,,"smart_toy
+
+出处页码（点一下，右侧课件同步跳转）
+
+p.56
+
+p.55
+
+p.58
+
+p.57
+
+结论：ICL 是模型在推理时利用 prompt 中的示例和上下文信息推断任务，并据此对新输入作出预测；其关键特征是无需重新训练模型 〔p.56〕〔p.55〕〔p.58〕。
+
+在 ICL 中，自注意力机制会把上下文中的示例与测试输入关联起来，并聚合 prompt 中与任务相关的信息 〔p.56〕。
+
+模型会利用示例推断任务结构，并将同一映射应用到新的输入上 〔p.55〕。
+
+对于足够大的模型，ICL 还可以让模型跟随上下文给出的输入—标签映射，甚至覆盖预训练语义先验 〔p.57〕。
+
+与重新训练不同，ICL 不需要重新训练模型；示例会在隐藏状态中诱导任务向量，从而引导预测 〔p.58〕。
+
+keyboard_arrow_right
+
+出处原文（4 处，需要核对时再展开）
+
+keyboard_arrow_right
+
+检索证据（6 条，默认收起）",,,,,,,,,,,自动化浏览器观察记录。未由真人评价；未自动点击出处；“curated_scenario”是预设任务，不是参与者自选问题。
+AUTO-20261113-01,2026-11-13 16:49:55 HKT,https://generative-ai-edb2vsczy5zdjprebcdn8p.streamlit.app/,automated_browser,lecture_only,partial,课程如何解释 Chain-of-Thought 提示对多步推理的帮助？它的局限是什么？,仅课程材料,1,answer,45.93,43;36;37;11,4,0,,"smart_toy
+
+出处页码（点一下，右侧课件同步跳转）
+
+p.43
+
+p.36
+
+p.37
+
+p.11
+
+结论：课程把 Chain-of-Thought（CoT）作为推理任务的提示方法，并认为它对复杂任务有帮助；但它的局限是，当任务包含多个各自需要深入思考的独立步骤时，仅靠单次提示或单次 CoT 可能不够，需要改用 prompt chaining；同时课程还强调 CoT 不等同于“规划”。
+
+CoT 对多步/复杂推理的帮助
+
+课程将 Chain of Thoughts（CoT）列为“推理任务”的提示方法 〔p.43〕。
+
+课程认为 CoT prompting 对复杂任务是有用的，并把它放在“链式复杂提示以增强表现”的讨论中 〔p.36〕。
+
+课程指出，如果试图在一个提示中处理所有事情，模型有时可能表现不佳，因此需要把复杂任务拆分 〔p.36〕。
+
+CoT 的局限
+
+当任务有多个 distinct steps，且每个步骤都需要深入思考时，课程认为不能只依赖 CoT，而应引入 prompt chaining 〔p.36〕。
+
+Prompt chaining 的做法是把复杂任务拆成更小、可管理的子任务 〔p.36〕。
+
+课程进一步建议链式提示时要识别子任务、用 XML 结构传递输出、确保每个子任务有单一目标，并根据模型表现迭代优化 〔p.37〕。
+
+课程还强调，Planning 并不等同于 chain-of-thought；计划可以是 checklist、graph、program 或 human specification 〔p.11〕。
+
+keyboard_arrow_right
+
+出处原文（4 处，需要核对时再展开）
+
+keyboard_arrow_right
+
+检索证据（6 条，默认收起）",,,,,,,,,,,自动化浏览器观察记录。未由真人评价；未自动点击出处；“curated_scenario”是预设任务，不是参与者自选问题。
+AUTO-20261113-01,2026-11-13 16:50:18 HKT,https://generative-ai-edb2vsczy5zdjprebcdn8p.streamlit.app/,automated_browser,lecture_only,uncovered,课程有没有给出2025年主流大模型API价格的横向比较？,仅课程材料,1,refusal,7.78,,0,0,,"smart_toy
+
+讲义中没有找到足以支撑这个问题的内容，因此我不作答。可以换个问法、补充关键词，或指明相关讲义与章节。",,,,,,,,,,,自动化浏览器观察记录。未由真人评价；未自动点击出处；“curated_scenario”是预设任务，不是参与者自选问题。
+AUTO-20261113-01,2026-11-13 16:50:41 HKT,https://generative-ai-edb2vsczy5zdjprebcdn8p.streamlit.app/,automated_browser,lecture_only,cross,比较第2讲的提示工程、第3讲的 ReAct Agent 和第4讲的 Harness Engineering，它们分别解决什么问题？,仅课程材料,1,refusal,5.67,,0,0,,"smart_toy
+
+讲义中没有找到足以支撑这个问题的内容，因此我不作答。可以换个问法、补充关键词，或指明相关讲义与章节。",,,,,,,,,,,自动化浏览器观察记录。未由真人评价；未自动点击出处；“curated_scenario”是预设任务，不是参与者自选问题。
+AUTO-20261113-01,2026-11-13 16:51:11 HKT,https://generative-ai-edb2vsczy5zdjprebcdn8p.streamlit.app/,automated_browser,lecture_only,curated_scenario,如果我想快速复习这门课的主线，应当按什么顺序串联四份讲义中的重点？,仅课程材料,1,answer,14.14,3;2;12;18;22;9;20;32;48;56;13;31;37;11;27;34;43,17,0,https://lilianweng.github.io/posts/2023-06-23-agent/;https://openai.com/index/harness-engineering/,"smart_toy
+
+出处页码（点一下，右侧课件同步跳转）
+
+p.3
+
+p.2
+
+p.2
+
+p.2
+
+p.12
+
+p.18
+
+p.22
+
+p.9
+
+p.20
+
+p.32
+
+p.48
+
+p.56
+
+p.13
+
+p.22
+
+p.31
+
+p.37
+
+p.11
+
+p.20
+
+p.27
+
+p.34
+
+p.43
+
+课程总览 本课程从语言模型的基础原理出发，逐步深入到提示工程与上下文学习的应用技巧，进而探讨如何构建具备自主决策能力的智能体（Agent），最后聚焦于通过环境设计（Harness Engineering）来最大化智能体的实际效能 〔p.3〕〔p.2〕〔p.2〕〔p.2〕。
+
+Introduction to Large Language Model (010-introduction-to-large-language-model)
+
+语言模型是预测词序列概率的统计模型，旨在模拟人类语言结构以支持翻译、生成等应用 〔p.3〕。
+传统统计模型基于马尔可夫假设，利用 n-gram（如 Unigram, Bigram）近似计算单词条件概率 〔p.12〕。
+循环神经网络（RNN）在处理长序列时面临梯度消失或爆炸的问题，难以捕捉长距离依赖 〔p.18〕。
+Transformer 架构通过编码器-解码器结构、多头自注意力机制以及位置编码解决了上述问题，成为现代大模型的基础 〔p.22〕。
+
+In-Context Learning (020-in-context-learning-dark)
+
+提示词由指令、上下文、输入数据和输出指示符四部分组成，结构化设计能引导模型产生更好响应 〔p.9〕。
+在通用任务中，使用带有双括号占位符的模板可以区分固定内容与动态变量，便于测试不同输入 〔p.20〕。
+利用 XML 标签对提示中的不同部分（如数据、指令）进行结构化分隔，有助于提升复杂任务的清晰度 〔p.32〕。
+元提示（Meta prompting）通过关注结构而非具体示例内容，提高了 Token 效率并实现了更公平的模型比较 〔p.48〕。
+上下文学习的实现依赖于 Transformer 的自注意力机制、归纳头、位置编码及堆叠块结构，使其能够关联示例并推断任务 〔p.56〕。
+
+Agent - From language model to goal-directed system (agent-dsc6021-dark)
+
+智能体不同于仅生成文本的聊天机器人，它是嵌入在控制循环中的模型，通过重复决策和行动改变外部世界状态 〔p.2〕。
+ReAct 框架通过交替进行推理（Thought）、行动（Action）和观察（Observation），使模型能基于真实反馈修正后续决策 〔p.13〕。
+记忆检索通常采用最大内积搜索（MIPS），结合过滤和重排序技术，以低延迟获取相关且带来源的信息 〔p.22〕。
+工具使用能力分为调用、检索和规划三个层级，评估时需关注中间决策的正确性而不仅是最终答案 〔p.31〕。
+长程任务的可靠性随步骤增加呈指数级下降，因此需要检查点、重试和可逆操作等容错系统设计 〔p.37〕。
+
+Harness Engineering - Designing environments in which agents can succeed (harness-engineering)
+
+智能体的实际表现取决于模型、上下文、工具、工作流及权限等多重因素，而不仅仅是模型本身的能力 〔p.2〕。
+上下文工程应采用“渐进式披露”策略，提供指向权威文档的短入口地图，避免单一巨型手册导致的冲突和过时问题 〔p.11〕。
+OpenAI 的案例研究表明，通过 Codex 生成代码并由人类引导系统设计的模式，可显著缩短实施时间并产出大量合并请求 〔p.20〕。
+压缩上下文时需警惕“简洁性偏差”，应保留关键约束和原始证据链接，防止边缘案例和不确定性信息丢失 〔p.27〕。
+Harness 层（如提示规则、工具描述、恢复逻辑）比模型权重更易检查和迭代，是近期系统改进的主要切入点 〔p.34〕。
+相比缓慢且黑盒的模型权重更新，Harness 更新速度快、组件可解释性强，但需注意工作流过拟合的风险 〔p.43〕。
+
+各讲关系说明 课程主线遵循“基础原理（LLM/Transformer）→ 交互技巧（ICL/Prompting）→ 行为范式（Agent/ReAct）→ 系统工程（Harness/Environment）”的逻辑演进，展示了从理解模型内部机制到构建可靠外部应用系统的完整路径。
+
+keyboard_arrow_right
+
+出处原文（21 处，需要核对时再展开）
+
+keyboard_arrow_right
+
+检索证据（26 条，默认收起）",,,,,,,,,,,自动化浏览器观察记录。未由真人评价；未自动点击出处；“curated_scenario”是预设任务，不是参与者自选问题。
+AUTO-20261113-01,2026-11-13 16:52:01 HKT,https://generative-ai-edb2vsczy5zdjprebcdn8p.streamlit.app/,automated_browser,lecture_plus_web,covered,"什么是上下文学习（In-Context Learning, ICL）？它和参数更新有什么区别？",课程材料 + 网络补充,1,answer,33.22,55;56;58;57,4,0,,"smart_toy
+
+出处页码（点一下，右侧课件同步跳转）
+
+p.55
+
+p.56
+
+p.58
+
+p.57
+
+结论： 上下文学习（ICL）是指模型在同一个提示/上下文中利用给出的示例来推断任务结构，并据此对新输入进行预测；它的关键不是重新训练或更新模型参数，而是让上下文中的示例在模型内部形成任务相关表示并指导预测。〔p.55〕〔p.56〕〔p.58〕
+
+ICL 的基本方式：用上下文示例推断任务 模型通过自注意力捕捉长程依赖，把 in-context examples 与测试输入关联起来，并聚合整个提示中的任务相关信息。〔p.56〕 模型会利用示例来推断任务结构，并把同一映射应用到新的输入上。〔p.55〕
+
+ICL 的内部机制：上下文示例形成任务相关表示 演示/示例会在模型隐藏状态中诱导形成任务特定向量，从而指导预测。〔p.58〕 Transformer 的分层结构使模型能够先对各个示例进行语境化，再在更高层聚合信息以推断任务并生成预测。〔p.56〕
+
+ICL 与参数更新的区别：不重新训练也能使用示例完成任务 ICL 依靠上下文中的示例来指导预测，而不是通过重新训练来改变模型。〔p.58〕 在足够大的模型中，模型甚至可以忽略预训练语义先验，直接遵循上下文中的输入—标签映射。〔p.57〕
+
+规模对 ICL 的影响：大模型更能学习任意映射 只有足够大的模型能够学习语义上无关的任意输入—标签映射，说明规模使模型能够超越语义先验进行纯模式学习。〔p.57〕 更大的模型会发展出更稳健的归纳偏置，从而更好地处理提示中模糊或新颖的任务结构。〔p.57〕
+
+keyboard_arrow_right
+
+出处原文（4 处，需要核对时再展开）
+
+keyboard_arrow_right
+
+检索证据（6 条，默认收起）",,,,,,,,,,,自动化浏览器观察记录。未由真人评价；未自动点击出处；“curated_scenario”是预设任务，不是参与者自选问题。
+AUTO-20261113-01,2026-11-13 16:53:17 HKT,https://generative-ai-edb2vsczy5zdjprebcdn8p.streamlit.app/,automated_browser,lecture_plus_web,partial,课程如何解释 Chain-of-Thought 提示对多步推理的帮助？它的局限是什么？,课程材料 + 网络补充,1,answer,60.05,43;36;11;37;38,5,0,,"smart_toy
+
+出处页码（点一下，右侧课件同步跳转）
+
+p.43
+
+p.36
+
+p.11
+
+p.37
+
+p.38
+
+结论：课程把 Chain-of-Thought 列为推理任务的一种提示方法 〔p.43〕，并指出它对复杂任务有帮助 〔p.36〕；但课程也强调 CoT 不等于规划 〔p.11〕，且当任务包含多个需要深入思考的不同步骤时，应使用 prompt chaining 〔p.36〕。
+
+对多步推理的帮助
+Chain-of-Thought 被课程放在“Reasoning tasks”下，作为处理推理任务的方法之一 〔p.43〕。
+课程称 CoT prompting 对复杂任务表现很好 〔p.36〕。
+课程提醒，如果试图在一个 prompt 里处理所有复杂任务，模型可能掉链子 〔p.36〕。
+当任务有多个彼此不同的步骤，且每个步骤都需要深入思考时，课程引入 prompt chaining 〔p.36〕。
+Prompt chaining 的做法是把复杂任务拆成更小、可管理的子任务 〔p.36〕。
+具体链式提示方法包括识别顺序子任务、用 XML 标签传递输出、让每个子任务只有一个清晰目标，并根据模型表现迭代 〔p.37〕。
+课程还给出链式工作流例子，如内容创作、数据处理、决策和验证循环 〔p.38〕。
+局限或边界
+课程强调规划不等同于 chain-of-thought 〔p.11〕。
+计划可以是 checklist、graph、program 或 human specification 〔p.11〕。
+如果让 LLM 生成计划，优点是灵活快速并利用任务上下文，但风险是可能发明步骤或遗漏约束 〔p.11〕。
+任务模板可预测且易于审计，但在已知流程之外会很脆弱 〔p.11〕。
+外部规划器可以强制形式依赖，但需要正确的符号模型 〔p.11〕。
+人工提供的计划能编码专业知识和判断，但占用稀缺注意力，且可能无法扩展 〔p.11〕。
+keyboard_arrow_right
+
+出处原文（5 处，需要核对时再展开）
+
+keyboard_arrow_right
+
+检索证据（6 条，默认收起）",,,,,,,,,,,自动化浏览器观察记录。未由真人评价；未自动点击出处；“curated_scenario”是预设任务，不是参与者自选问题。
+AUTO-20261113-01,2026-11-13 16:53:38 HKT,https://generative-ai-edb2vsczy5zdjprebcdn8p.streamlit.app/,automated_browser,lecture_plus_web,uncovered,课程有没有给出2025年主流大模型API价格的横向比较？,课程材料 + 网络补充,1,refusal,4.24,,0,0,,"smart_toy
+
+讲义中没有找到足以支撑这个问题的内容，因此我不作答。可以换个问法、补充关键词，或指明相关讲义与章节。",,,,,,,,,,,自动化浏览器观察记录。未由真人评价；未自动点击出处；“curated_scenario”是预设任务，不是参与者自选问题。
+AUTO-20261113-01,2026-11-13 16:53:58 HKT,https://generative-ai-edb2vsczy5zdjprebcdn8p.streamlit.app/,automated_browser,lecture_plus_web,cross,比较第2讲的提示工程、第3讲的 ReAct Agent 和第4讲的 Harness Engineering，它们分别解决什么问题？,课程材料 + 网络补充,1,refusal,4.96,,0,0,,"smart_toy
+
+讲义中没有找到足以支撑这个问题的内容，因此我不作答。可以换个问法、补充关键词，或指明相关讲义与章节。",,,,,,,,,,,自动化浏览器观察记录。未由真人评价；未自动点击出处；“curated_scenario”是预设任务，不是参与者自选问题。
+AUTO-20261113-01,2026-11-13 16:54:26 HKT,https://generative-ai-edb2vsczy5zdjprebcdn8p.streamlit.app/,automated_browser,lecture_plus_web,curated_scenario,如果我想快速复习这门课的主线，应当按什么顺序串联四份讲义中的重点？,课程材料 + 网络补充,1,answer,10.61,3;12;18;22;9;20;32;41;48;56;2;13;11,13,0,https://lilianweng.github.io/posts/2023-06-23-agent/;https://openai.com/index/harness-engineering/,"smart_toy
+
+出处页码（点一下，右侧课件同步跳转）
+
+p.3
+
+p.12
+
+p.18
+
+p.22
+
+p.9
+
+p.20
+
+p.32
+
+p.41
+
+p.48
+
+p.56
+
+p.2
+
+p.13
+
+p.2
+
+p.11
+
+p.20
+
+这门课程的主线逻辑是从语言模型的基础原理出发，探讨如何通过提示工程激发其能力，进而构建具备自主行动能力的智能体，最后通过环境工程（Harness Engineering）来保障智能体的可靠性与效能。
+
+介绍大型语言模型（010-introduction-to-large-language-model）
+定义与目标：语言模型是预测词序列概率的统计模型，旨在模拟人类语言结构以支持翻译、生成等应用 〔p.3〕。
+统计基础：早期模型基于马尔可夫假设，即当前词的概率仅依赖于前固定数量的词，如 n-gram 模型 〔p.12〕。
+架构演进：传统 RNN 存在梯度消失或爆炸问题，难以学习长距离依赖；Transformer 通过自注意力机制和位置编码解决了这一问题，并采用编码器-解码器结构 〔p.18〕〔p.22〕。
+上下文学习与提示工程（020-in-context-learning-dark）
+提示结构：有效的提示包含指令、上下文、输入数据和输出指示符四个部分，用于引导模型产生特定响应 〔p.9〕。
+工程技术：利用模板变量处理动态内容，使用 XML 标签结构化复杂指令以提高清晰度，以及通过元提示（Meta prompting）实现零样本推理的高效比较 〔p.20〕〔p.32〕〔p.41〕〔p.48〕。
+发生机制：上下文学习之所以有效，得益于 Transformer 的自注意力捕捉长程依赖、归纳头检测映射关系、位置编码保留顺序以及堆叠块实现的“先上下文化后聚合”处理 〔p.56〕。
+从语言模型到目标导向系统（agent-dsc6021-dark）
+智能体定义：智能体不同于聊天机器人，它是嵌入在控制循环中的模型，具备记忆、工具和停止规则，通过与环境交互改变状态并以最终世界状态判定成功 〔p.2〕。
+核心机制：ReAct 框架通过交替进行推理和行动，利用观察结果为后续决策提供依据；最大内积搜索（MIPS）用于高效检索相关记忆，需结合过滤和重排序 〔p.13〕。
+评估与挑战：工具使用评估分为调用、检索和规划三个层级；长周期任务的可靠性随步骤增加呈指数级下降，因此需要检查点、重试和可逆操作等容错设计 。
+Harness Engineering：设计智能体成功的环境（harness-engineering）
+环境重要性：模型仅是组件之一，实际能力取决于上下文、工具、工作流和反馈等环境因素；良好的 Harness 工程能改善智能应用的条件 〔p.2〕。
+上下文管理：应采用渐进式披露而非单一巨型手册，避免上下文崩溃和简洁性偏差导致的边缘案例丢失，确保压缩不删除关键决策信息 〔p.11〕。
+改进策略：Harness 代码比模型权重更易检查和测试，是近期改进的主要表面；需在 Harness 更新（快速、可解释）和权重更新（慢速、分布式）之间权衡，OpenAI 的案例显示 Codex 在人类引导下实现了大规模代码生成 〔p.20〕。
+
+这四份讲义层层递进：首先确立 LLM 的技术底座，接着展示如何通过 Prompt 挖掘其静态潜力，然后引入 Agent 概念使其具备动态交互能力，最后通过 Harness Engineering 优化外部系统以确保 Agent 在复杂任务中的稳定运行。
+
+keyboard_arrow_right
+
+出处原文（15 处，需要核对时再展开）
+
+keyboard_arrow_right
+
+检索证据（26 条，默认收起）",,,,,,,,,,,自动化浏览器观察记录。未由真人评价；未自动点击出处；“curated_scenario”是预设任务，不是参与者自选问题。

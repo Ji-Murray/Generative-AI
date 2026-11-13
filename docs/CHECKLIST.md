@@ -9,7 +9,7 @@
 | Identify real users and needs | ✅ | `docs/REPORT.md` §1：复习学生 / 出处与拒答需求 |
 | Demonstrate useful behavior | ✅ | 可运行产品：问答+页码跳转、拒答、Quiz、学习闭环；`docs/DEMO.md` |
 | Evaluate in its intended setting | 🟡 | 离线评估已完成；用户研究协议已就绪，**答辩前按 `docs/USER_STUDY.md` 采 5–8 人** |
-| Generative model + meaningful evaluation | ✅ | LLM 生成答疑/出题；72 题消融 + judge 冒烟；`eval/reports/SUITE_RESULTS.md` |
+| Generative model + meaningful evaluation | ✅（口径已注明） | LLM 生成答疑/出题；72 题消融 + judge 冒烟；已注明自制示例课件范围与 grounded 指标限制；`eval/reports/SUITE_RESULTS.md` |
 
 ## B. 交付物
 

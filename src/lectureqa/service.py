@@ -100,6 +100,19 @@ class LectureQAService:
         )
         self.quiz_generator = QuizGenerator(self.retriever, self.llm, self.settings)
 
+    def set_web_fallback(self, enabled: bool) -> None:
+        """让前端的显式来源选择即时启用或关闭 Wikipedia 补充。"""
+        mode = "wikipedia" if enabled else "off"
+        if self.settings.web_fallback == mode and (
+            enabled or self.web_search.name == "off"
+        ):
+            return
+        self.settings = self.settings.model_copy(update={"web_fallback": mode})
+        self.web_search = make_web_search(self.settings)
+        self.answerer = Answerer(
+            self.retriever, self.llm, self.settings, web_search=self.web_search
+        )
+
     # ------------------------------------------------------------------ 能力
     def search(
         self,
@@ -119,6 +132,8 @@ class LectureQAService:
         top_k: int | None = None,
         allow_web: bool | None = None,
     ) -> Answer:
+        if allow_web is not None:
+            self.set_web_fallback(allow_web)
         return self.answerer.answer(
             question, doc_ids=doc_ids, top_k=top_k, allow_web=allow_web
         )
@@ -131,6 +146,8 @@ class LectureQAService:
         top_k: int | None = None,
         allow_web: bool | None = None,
     ) -> Iterator[StreamEvent]:
+        if allow_web is not None:
+            self.set_web_fallback(allow_web)
         return self.answerer.stream_answer(
             question, doc_ids=doc_ids, top_k=top_k, allow_web=allow_web
         )

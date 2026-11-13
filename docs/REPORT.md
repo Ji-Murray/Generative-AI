@@ -72,8 +72,9 @@ PDF → 按页抽取 → 不跨页分块 → 向量+BM25 混合检索
 
 ### 3.2 测试集
 
-- 正式集：`eval/testset.full.jsonl`（72 题；可答 62 / 不可答 10；覆盖 10 份讲义）
+- 正式集：`eval/testset.full.jsonl`（72 题；可答 62 / 不可答 10；覆盖课程讲义与项目自制示例课件）
 - 冒烟集：`eval/testset.sample.jsonl`（6 题）
+- **数据范围说明**：正式集并非全部来自真实课程 PDF；其中 `lecture01-course-overview`、`lecture02-transformer`、`lecture03-retrieval-augmented-generation` 对应 `scripts/make_sample_pdfs.py` 生成的自制示例课件，其余题目来自项目已入库的课程讲义。示例课件用于验证工程链路与评估流程，不用于证明真实课程政策或真实学生收益。
 - 标注规范见 `docs/EVALUATION.md`
 
 ### 3.3 实验组
@@ -109,11 +110,16 @@ EVAL_JUDGE_MODEL=<model> lectureqa eval --testset eval/testset.sample.jsonl -k 6
 | ablation-bm25-only | 0.677 | 0.653 | 0.504 | 0.505 | 0.548 | 0.653 | 1.0 | 0.0 | 10427 |
 | ablation-hybrid-cross-encoder | 0.919 | 0.887 | 0.749 | 0.703 | 0.855 | 0.875 | 1.0 | 0.0 | 15080 |
 
+**口径说明**
+
+- 以上表格是本项目当前保存的正式套件结果，后续演示材料统一采用这一组数字；不要再混用其他运行批次的 MRR、grounded 或拒答率。
+- 这里的 `grounded` 定义为“答案至少包含一条通过证据页校验的引用”，不等同于“答案中的每个论断都已经完成语义级事实核验”。`citation_precision` 也只检查引用页是否命中 gold 页，不能单独证明整段答案完全正确。
+
 **结论**
 
 - Hybrid+coverage 相对 BM25-only：hit +24pp、recall +23pp、MRR +25pp、citeP +17pp、grounded +26pp。
 - cross-encoder 相对 coverage：召回持平，citeP/grounded/refuseAcc 略升；默认仍用轻量 coverage。
-- 不可答题拒答率 **100%**，符合“宁可少答也不能乱答”。
+- 在这 10 道不可答题上，主配置拒答率为 **100%（10/10）**；这只是本测试集结果，不应外推为所有未知问题都能正确拒答。
 
 ### 4.2 RQ4：LLM-as-judge（sample，6 题）
 
@@ -125,7 +131,7 @@ EVAL_JUDGE_MODEL=<model> lectureqa eval --testset eval/testset.sample.jsonl -k 6
 | refusal_accuracy | 1.00 |
 | avg_latency_ms | 16659 |
 
-在引用约束下，冒烟集 judge 分数为 0.80，未出现“有引用但整体不可用”的崩塌；正式全量 judge 可作为答辩前可选加强项。原始报告：`eval/reports/suite-sample-with-judge-20261110-145513.*`。
+在引用约束下，冒烟集 judge 分数为 0.80。该结果只能说明 6 题小样本上的表现，不能单独证明引用约束相对“无引用约束”没有质量代价，因为当前没有对应的无约束对照组；正式全量 judge 可作为答辩前可选加强项。原始报告：`eval/reports/suite-sample-with-judge-20261110-145513.*`。
 
 ### 4.3 阈值敏感性（sample）
 
@@ -158,6 +164,8 @@ sample 偏易，曲线较平；正式集上仍有 11/62 可答题被保守拒答
 - 5–8 名同学 × 每人约 5 题 × 两种来源模式；
 - 记录有用性 / 可信度 / 是否查看引用 / 来源归属正确率 / 模式偏好；
 - **小样本不作普遍结论**，报告样本数与局限。
+
+截至目前尚未完成真实用户研究。尝试访问线上 Streamlit 应用时，应用要求登录并在公开地址与 Streamlit 登录入口之间重定向，因此无法进行黑盒测试，也没有将推测结果写入记录表。真实采集仍需在应用开放访问后，按 `docs/USER_STUDY.md` 招募 5–8 名同学完成。
 
 答辩前按该协议完成采集，把汇总填入本节与附录即可闭环 *evaluate in its intended setting*。
 

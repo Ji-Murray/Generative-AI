@@ -18,10 +18,11 @@ if str(ROOT / "src") not in sys.path:
     sys.path.insert(0, str(ROOT / "src"))
 
 from lectureqa.config import get_settings  # noqa: E402
-from lectureqa.generation.qa import MARKER_RE, display_answer  # noqa: E402
+from lectureqa.generation.qa import MARKER_RE, Answerer, display_answer  # noqa: E402
 from lectureqa.ingest.pdf import PDFError, render_page_png  # noqa: E402
 from lectureqa.learning.outline import parse_topic_span  # noqa: E402
 from lectureqa.learning.progress import grade_quiz_answer  # noqa: E402
+from lectureqa.retrieval.web import make_web_search  # noqa: E402
 from lectureqa.schemas import LectureOutline, QuizAttempt, QuizSource  # noqa: E402
 from lectureqa.service import LectureQAService  # noqa: E402
 
@@ -169,11 +170,55 @@ button[data-baseweb="tab"][aria-selected="true"] { color: var(--accent); }
 """
 
 
+def tr(zh: str, en: str) -> str:
+    return en if st.session_state.get("ui_language", "zh") == "en" else zh
+
+
+def language_selector() -> str:
+    with st.sidebar:
+        language = st.selectbox(
+            "语言 / Language", ["zh", "en"],
+            format_func=lambda code: {"zh": "中文", "en": "English"}[code],
+            key="ui_language",
+        )
+        previous = st.session_state.get("previous_ui_language")
+        if previous is not None and previous != language:
+            st.session_state.pop("outline", None)
+        st.session_state["previous_ui_language"] = language
+        st.caption(tr(
+            "切换界面与新回答的语言；原始课件和历史内容保持不变。",
+            "Changes the interface and new responses. PDFs and existing content stay unchanged.",
+        ))
+    return language
+
+
+def status_labels() -> dict[str, str]:
+    return {
+        "not_started": tr("未开始", "Not started"),
+        "learning": tr("学习中", "In progress"),
+        "completed": tr("已完成", "Completed"),
+    }
+
+
 def render_app_styles() -> None:
     st.markdown(APP_CSS, unsafe_allow_html=True)
 
 
 def page_header(kicker: str, title: str, subtitle: str = "") -> None:
+    translations = {
+        "建立你的课程库": "Build your course library",
+        "讲义学习": "Lecture review",
+        "练习 / 错题": "Practice & mistakes",
+        "全课程问答": "Course Q&A",
+        "课程管理": "Course management",
+        "上传讲义后，LectureQA 会生成课程地图、逐讲摘要和可引用问答。": "Upload lectures to create a course map, summaries and source-linked Q&A.",
+        "概览、问答与自测共用右侧课件；点击出处页码即可对照原文。": "Review, ask questions and practice alongside the PDF. Click citations to check the source.",
+        "按知识点生成可溯源自测题；批改后自动归入错题本与薄弱知识点。": "Generate source-linked quizzes and review mistakes and weak concepts.",
+        "左侧问答、右侧课件对照；点出处页码即可同步跳转，不用上下翻找。": "Ask on the left and check the PDF on the right. Click page citations to navigate.",
+        "上传、索引、检索调试与系统状态；日常学习不需要进入这里。": "Manage uploads, indexing and retrieval diagnostics.",
+    }
+    title = tr(title, translations.get(title, title))
+    subtitle = tr(subtitle, translations.get(subtitle, subtitle))
     st.markdown(
         f'<div class="section-kicker">{kicker}</div>'
         f"<h1 style='margin:.45rem 0 .2rem'>{title}</h1>"
@@ -185,13 +230,35 @@ def page_header(kicker: str, title: str, subtitle: str = "") -> None:
 def status_pill(status: str) -> str:
     return (
         f'<span class="status-pill {status}">{STATUS_ICON.get(status, "⚪")} '
-        f'{escape(STATUS_LABEL.get(status, status))}</span>'
+        f'{escape(status_labels().get(status, status))}</span>'
     )
 
 
-@st.cache_resource(show_spinner=False)
-def get_service() -> LectureQAService:
-    return LectureQAService(get_settings())
+def configure_web_fallback(service: LectureQAService, enabled: bool) -> None:
+    if hasattr(service, "set_web_fallback"):
+        service.set_web_fallback(enabled)
+        return
+    # Allows a hot-reloaded Streamlit process to recover an older imported service class.
+    mode = "wikipedia" if enabled else "off"
+    service.settings = service.settings.model_copy(update={"web_fallback": mode})
+    service.web_search = make_web_search(service.settings)
+    service.answerer = Answerer(
+        service.retriever, service.llm, service.settings, web_search=service.web_search
+    )
+
+
+def get_service(language: str = "zh") -> LectureQAService:
+    # A service owns mutable generation settings; never share it across browser sessions.
+    service = st.session_state.get("lectureqa_service")
+    if (
+        service is None
+        or not hasattr(service, "set_web_fallback")
+        or service.settings.default_language != language
+    ):
+        settings = get_settings().model_copy(update={"default_language": language})
+        service = LectureQAService(settings)
+        st.session_state["lectureqa_service"] = service
+    return service
 
 
 @st.cache_data(show_spinner=False)
@@ -910,13 +977,16 @@ def sidebar(service: LectureQAService) -> tuple[list[str] | None, int, bool]:
         st.markdown(
             '<div style="padding:.1rem .65rem .8rem">'
             '<div style="font-weight:700;font-size:1.1rem;color:#f3f4f1">LectureQA</div>'
-            '<div style="font-size:.72rem;color:#91a19b;margin-top:.2rem">课程学习工作台</div>'
+            f'<div style="font-size:.72rem;color:#91a19b;margin-top:.2rem">{tr("课程学习工作台", "Course study workspace")}</div>'
             '</div>',
             unsafe_allow_html=True,
         )
         nav_labels = {
-            "home": "课程首页", "lecture": "讲义学习", "quiz": "练习与错题",
-            "chat": "全课程问答", "dev": "课程管理",
+            "home": tr("课程首页", "Course home"),
+            "lecture": tr("讲义学习", "Lecture review"),
+            "quiz": tr("练习与错题", "Practice & mistakes"),
+            "chat": tr("全课程问答", "Course Q&A"),
+            "dev": tr("课程管理", "Course management"),
         }
         nav_icons = {
             "home": ":material/grid_view:", "lecture": ":material/menu_book:",
@@ -935,9 +1005,9 @@ def sidebar(service: LectureQAService) -> tuple[list[str] | None, int, bool]:
                     )
         st.divider()
 
-        with st.expander("课程管理", expanded=not service.indexed):
+        with st.expander(tr("课程管理", "Course management"), expanded=not service.indexed):
             uploads = st.file_uploader(
-                "上传讲义 PDF（可多选）",
+                tr("上传讲义 PDF（可多选）", "Upload lecture PDFs"),
                 type=["pdf"],
                 accept_multiple_files=True,
                 help=f"上传后增量写入索引；文件保存到 {settings.upload_dir}",
@@ -990,7 +1060,7 @@ def sidebar(service: LectureQAService) -> tuple[list[str] | None, int, bool]:
                     else:
                         st.success("课程大纲已更新")
 
-        with st.expander("检索设置", expanded=False):
+        with st.expander(tr("检索设置", "Retrieval settings"), expanded=False):
             docs = service.documents()
             doc_ids = None
             if docs:
@@ -999,26 +1069,29 @@ def sidebar(service: LectureQAService) -> tuple[list[str] | None, int, bool]:
                     for document in docs
                 }
                 selected = st.multiselect(
-                    "限定讲义（留空 = 全部）",
+                    tr("限定讲义（留空 = 全部）", "Lecture scope (empty = all)"),
                     options=list(titles),
                     format_func=lambda value: titles[value],
+                    key="retrieval_scope",
                 )
                 doc_ids = selected or None
-            top_k = st.slider("证据片段数 top-k", 2, 12, settings.top_k)
+            top_k = st.slider(tr("证据片段数 top-k", "Evidence chunks (top-k)"), 2, 12, settings.top_k, key="retrieval_top_k")
             answer_mode = st.radio(
-                "回答来源",
+                tr("回答来源", "Answer sources"),
                 options=["course_only", "course_plus_web"],
                 format_func=lambda mode: {
-                    "course_only": "仅课程材料",
-                    "course_plus_web": "课程材料 + 网络补充",
+                    "course_only": tr("仅课程材料", "Course materials only"),
+                    "course_plus_web": tr("课程材料 + 网络补充", "Course materials + web"),
                 }[mode],
                 index=0,
-                help=(
-                    "仅课程材料：证据不足时明确说明材料未覆盖。"
-                    "课程材料 + 网络补充：讲义证据不足时尝试网络检索，网络内容与讲义引用分开展示。"
+                key="answer_source_mode",
+                help=tr(
+                    "证据不足时拒答；开启网络补充后，外部来源与讲义引用分开展示。",
+                    "Insufficient course evidence leads to refusal. Optional web sources are labeled separately.",
                 ),
             )
             allow_web = answer_mode == "course_plus_web"
+            configure_web_fallback(service, allow_web)
 
         with st.expander("环境配置", expanded=False):
             st.caption(
@@ -1027,7 +1100,7 @@ def sidebar(service: LectureQAService) -> tuple[list[str] | None, int, bool]:
                 f"LEARNING_DIR `{settings.learning_dir}`\n\n"
                 f"分块 {settings.chunk_size} / 重叠 {settings.chunk_overlap}\n\n"
                 f"重排 `{settings.rerank}` · 证据阈值 {settings.min_evidence_score}\n\n"
-                f"网络补充 `{settings.web_fallback}` · LLM API Key "
+                f"网络补充 `{service.settings.web_fallback}` · LLM API Key "
                 f"{'已配置' if settings.llm_configured else '未配置'}"
             )
     return doc_ids, top_k, allow_web
@@ -1047,7 +1120,7 @@ def lecture_status(service: LectureQAService, doc_id: str) -> str:
 
 
 def status_badge(status: str) -> str:
-    return f"{STATUS_ICON.get(status, '⚪')} {STATUS_LABEL.get(status, status)}"
+    return f"{STATUS_ICON.get(status, '⚪')} {status_labels().get(status, status)}"
 
 
 def home_page(service: LectureQAService) -> None:
@@ -1070,8 +1143,8 @@ def home_page(service: LectureQAService) -> None:
 
     st.markdown(
         f'<div class="dashboard-greeting"><div class="page-kicker">YOUR STUDY DESK</div>'
-        f'<h1>继续你的学习</h1>'
-        f'<p>{len(docs)} 份讲义 · 已完成 {completed}/{len(outline.lectures)} 讲 · 自测正确率 {accuracy}</p></div>',
+        f'<h1>{tr("继续你的学习", "Continue learning")}</h1>'
+        f'<p>{len(docs)} {tr("份讲义", "lectures")} · {tr("已完成", "Completed")} {completed}/{len(outline.lectures)} · {tr("自测正确率", "Quiz accuracy")} {accuracy}</p></div>',
         unsafe_allow_html=True,
     )
 
@@ -1085,39 +1158,39 @@ def home_page(service: LectureQAService) -> None:
         resume_left, resume_right = st.columns([4.8, 1.15], vertical_alignment="center")
         with resume_left:
             st.markdown(
-                f'<div class="resume-panel"><div><div class="resume-label">推荐继续</div>'
-                f'<div class="resume-title">第 {next_lecture.order} 讲 · {escape(next_lecture.title)}</div>'
-                f'<div class="resume-meta">{next_page_count} 页 · {STATUS_LABEL.get(next_status, "未开始")} · 从课程地图进入原文学习</div></div>'
-                f'<div class="resume-progress"><div class="resume-progress-label"><span>课程进度</span><strong>{percent:.0%}</strong></div>'
+                f'<div class="resume-panel"><div><div class="resume-label">{tr("推荐继续", "Up next")}</div>'
+                f'<div class="resume-title">{tr("讲次", "Lecture")} {next_lecture.order} · {escape(next_lecture.title)}</div>'
+                f'<div class="resume-meta">{next_page_count} {tr("页", "pages")} · {status_labels().get(next_status, next_status)}</div></div>'
+                f'<div class="resume-progress"><div class="resume-progress-label"><span>{tr("课程进度", "Course progress")}</span><strong>{percent:.0%}</strong></div>'
                 f'<div class="resume-track"><div class="resume-fill" style="width:{percent:.0%}"></div></div></div></div>',
                 unsafe_allow_html=True,
             )
         with resume_right:
-            st.button("打开这一讲 →", key="continue_next", type="primary", use_container_width=True, on_click=goto_lecture, args=(next_lecture.doc_id,))
+            st.button(tr("打开这一讲 →", "Open lecture →"), key="continue_next", type="primary", use_container_width=True, on_click=goto_lecture, args=(next_lecture.doc_id,))
     else:
-        st.success("所有讲义都已完成。可以去「练习」做综合自测或复习错题。")
+        st.success(tr("所有讲义都已完成。可以去「练习」做综合自测或复习错题。", "All lectures completed. Try a quiz or review your mistakes."))
 
     metric_left, metric_right = st.columns([1.4, 2.6])
     with metric_left:
-        st.markdown("**学习概览**")
+        st.markdown(tr("**学习概览**", "**Study overview**"))
     with metric_right:
         col1, col2, col3 = st.columns(3)
-        col1.metric("已完成", f"{completed}/{len(outline.lectures)}")
-        col2.metric("学习中", str(learning))
-        col3.metric("自测正确率", accuracy)
+        col1.metric(tr("已完成", "Completed"), f"{completed}/{len(outline.lectures)}")
+        col2.metric(tr("学习中", "In progress"), str(learning))
+        col3.metric(tr("自测正确率", "Quiz accuracy"), accuracy)
 
-    st.markdown('<div class="dashboard-tools"><h2>课程目录</h2><span style="color:#727c8d;font-size:.82rem">按顺序学习，点击右侧进入</span></div>', unsafe_allow_html=True)
+    st.subheader(tr("课程目录", "Course contents"))
     with st.container(border=True):
         search_col, filter_col = st.columns([3, 1])
         with search_col:
-            query = st.text_input("搜索讲义或知识点", placeholder="搜索标题、文件名或知识点…", key="course_search", label_visibility="collapsed")
+            query = st.text_input(tr("搜索讲义或知识点", "Search lectures or concepts"), placeholder=tr("搜索标题、文件名或知识点…", "Search titles, files or concepts…"), key="course_search", label_visibility="collapsed")
         with filter_col:
-            status_filter = st.selectbox("学习状态", ["全部状态", *STATUS_LABEL.values()], key="course_filter", label_visibility="collapsed")
+            status_filter = st.selectbox(tr("学习状态", "Study status"), ["all", *status_labels()], format_func=lambda value: tr("全部状态", "All statuses") if value == "all" else status_labels()[value], key="course_status_filter", label_visibility="collapsed")
         sources = {document.doc_id: document.source_path for document in docs}
         doc_pages = {document.doc_id: document.pages for document in docs}
         visible = [
             lecture for lecture in outline.lectures
-            if (status_filter == "全部状态" or STATUS_LABEL.get(progress.status_of(lecture.doc_id)) == status_filter)
+            if (status_filter == "all" or progress.status_of(lecture.doc_id) == status_filter)
             and (not query.strip() or query.strip().casefold() in " ".join([
                 lecture.title, Path(sources.get(lecture.doc_id, "")).name, *lecture.concepts,
             ]).casefold())
@@ -1139,7 +1212,7 @@ def home_page(service: LectureQAService) -> None:
                     )
                 with action_col:
                     st.button(
-                        "进入讲义", key=f"start_{lecture.doc_id}", use_container_width=True,
+                        tr("进入讲义", "Open lecture"), key=f"start_{lecture.doc_id}", use_container_width=True,
                         on_click=goto_lecture, args=(lecture.doc_id,),
                     )
         if not visible:
@@ -1286,7 +1359,7 @@ def lecture_page(
     with left:
         st.markdown('<span class="lecture-scroll-marker"></span>', unsafe_allow_html=True)
         overview_tab, ask_tab, quiz_tab_view = st.tabs(
-            ["📄 本讲概览", "💬 本讲问答", "📝 本讲自测"]
+            [tr("本讲概览", "Overview"), tr("本讲问答", "Q&A"), tr("本讲自测", "Self-test")]
         )
         with overview_tab:
             lecture_overview(
@@ -1545,26 +1618,28 @@ def quiz_tab(
     lecture_id = lecture_id or (doc_ids[0] if doc_ids and len(doc_ids) == 1 else "course")
     concepts = concepts or []
 
-    st.caption("围绕讲义正文知识点出题（定义/公式/步骤/对比），不会考课件标题、第几讲，也不会问 PPT 第几页。")
+    st.caption(tr("围绕讲义正文知识点出题，不考课件标题或页码。", "Practice concepts, formulas and methods, not slide titles or page numbers."))
     with st.form(f"quiz_form_{key}"):
         col1, col2, col3 = st.columns([3, 1, 1])
         topic = col1.text_input(
-            "复习主题（知识点，不是讲义标题）",
+            tr("复习主题（知识点，不是讲义标题）", "Topic (concepts, not lecture titles)"),
             value=default_topic,
             key=f"topic_{key}",
-            help="填写要练的概念/公式范围，例如「扩散模型损失」；不要填 Lecture 标题或页码。",
+            help=tr("填写要练的概念或公式范围。", "Enter concepts or formulas to practice."),
         )
-        count = col2.slider("题数", 1, 10, 5, key=f"count_{key}")
+        count = col2.slider(tr("题数", "Questions"), 1, 10, 5, key=f"count_{key}")
         difficulty = col3.selectbox(
-            "难度", ["mixed", "easy", "medium", "hard"], key=f"difficulty_{key}"
+            tr("难度", "Difficulty"), ["mixed", "easy", "medium", "hard"], key=f"difficulty_{key}",
+            format_func=lambda value: tr({"mixed": "混合", "easy": "简单", "medium": "中等", "hard": "困难"}[value], value.title()),
         )
         types = st.multiselect(
-            "题型",
+            tr("题型", "Question types"),
             ["mcq", "true_false", "short_answer"],
             default=["mcq", "true_false"],
             key=f"types_{key}",
+            format_func=lambda value: {"mcq": tr("选择题", "Multiple choice"), "true_false": tr("判断题", "True / false"), "short_answer": tr("简答题", "Short answer")}[value],
         )
-        submitted = st.form_submit_button("生成自测", use_container_width=True)
+        submitted = st.form_submit_button(tr("生成自测", "Generate quiz"), use_container_width=True)
 
     state_key = f"quiz_result_{key}"
     graded_key = f"quiz_graded_{key}"
@@ -1729,7 +1804,7 @@ def quiz_page(service: LectureQAService, doc_ids: list[str] | None, top_k: int) 
     preview_scope = "quiz_all"
 
     def _left() -> None:
-        practice_tab, wrong_tab, weak_tab = st.tabs(["综合练习", "错题本", "薄弱知识点"])
+        practice_tab, wrong_tab, weak_tab = st.tabs([tr("综合练习", "Practice"), tr("错题本", "Mistakes"), tr("薄弱知识点", "Weak concepts")])
         with practice_tab:
             st.caption("练习按知识点出题；范围默认取左侧「限定讲义」，留空为全课程。出处页码仅用于核对，不会成为考题。")
             quiz_tab(
@@ -1853,7 +1928,8 @@ def search_tab(service: LectureQAService, doc_ids: list[str] | None, top_k: int)
 
 def main() -> None:
     render_app_styles()
-    service = get_service()
+    language = language_selector()
+    service = get_service(language)
     doc_ids, top_k, allow_web = sidebar(service)
 
     page = st.session_state.get("nav", "home")

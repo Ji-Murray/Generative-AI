@@ -1,0 +1,177 @@
+SLIDES 19 SIZE { width: 1280, height: 720 }
+SLIDE 1 SHAPES [
+  { id: '3', name: '', text: 'LectureQA', pos: t {} },
+  { id: '4', name: '', text: '面向课程复习的来源感知\n生成式学习助手', pos: t {} },
+  { id: '5', name: '', text: '系统设计、产品实现与可复现评估', pos: t {} },
+  {
+    id: '6',
+    name: '',
+    text: 'DSC6021 Generative AI · 2026年11月',
+    pos: t {}
+  }
+] IMAGES [ { id: '2', position: t {} } ] TABLES 0
+SLIDE 2 SHAPES [
+  { id: '3', name: '', text: '研究背景', pos: t {} },
+  { id: '4', name: '', text: '系统方法', pos: t {} },
+  { id: '5', name: '', text: '产品实现', pos: t {} },
+  { id: '6', name: '', text: '实验评估', pos: t {} },
+  { id: '7', name: '', text: '总结展望', pos: t {} },
+  { id: '8', name: '', text: '研究背景：复习答案需要范围、依据与边界', pos: t {} },
+  {
+    id: '9',
+    name: '',
+    text: 'LectureQA · DSC6021 Generative AI',
+    pos: t {}
+  },
+  { id: '10', name: '', text: '02', pos: t {} },
+  { id: '11', name: '', text: '复习中的四类问题', pos: t {} },
+  { id: '13', name: '', text: '产品定位', pos: t {} },
+  {
+    id: '14',
+    name: '',
+    text: '面向按课程范围复习的学生，把“能解释”与“能核对”放在同一学习流程中。\n贡献在于来源约束与工程实现，当前没有通用模型优越性或学习效果提升的实证。',
+    pos: t {}
+  }
+] IMAGES [ { id: '2', position: t {} } ] TABLES 1
+SLIDE 3 SHAPES [
+  { id: '3', name: '', text: '研究背景', pos: t {} },
+  { id: '4', name: '', text: '系统方法', pos: t {} },
+  { id: '5', name: '', text: '产品实现', pos: t {} },
+  { id: '6', name: '', text: '实验评估', pos: t {} },
+  { id: '7', name: '', text: '总结展望', pos: t {} },
+  { id: '8', name: '', text: '产品设计：课程地图、讲义学习与自测闭环', pos: t {} },
+  {
+    id: '9',
+    name: '',
+    text: 'LectureQA · DSC6021 Generative AI',
+    pos: t {}
+  },
+  { id: '10', name: '', text: '03', pos: t {} },
+  { id: '12', name: '', text: '以课程为起点组织学习', pos: t {} },
+  {
+    id: '13',
+    name: '',
+    text: '课程首页展示课程地图、目标与进度，\n帮助学生确定下一讲。',
+    pos: t {}
+  },
+  { id: '14', name: '', text: '讲义内学习与跨讲问答分开', pos: t {} },
+  {
+    id: '15',
+    name: '',
+    text: '单讲问答与自测默认限定当前讲义。\n跨讲比较使用全课程问答，\n让检索范围清晰可控。',
+    pos: t {}
+  },
+  { id: '16', name: '', text: '先作答，再核对', pos: t {} },
+  {
+    id: '17',
+    name: '',
+    text: '练习答案默认折叠，每题保留出处。\n进度与错题记录用于后续复习。',
+    pos: t {}
+  },
+  {
+    id: '18',
+    name: '',
+    text: '历史截图：2026-11-11，9份讲义；离线10文档与11-13线上4份讲义为不同语料快照。',
+    pos: t {}
+  }
+] IMAGES [ { id: '2', position: t {} }, { id: '11', position: t {} } ] TABLES 0
+SLIDE 4 SHAPES [
+  { id: '3', name: '', text: '研究背景', pos: t {} },
+  { id: '4', name: '', text: '系统方法', pos: t {} },
+  { id: '5', name: '', text: '产品实现', pos: t {} },
+  { id: '6', name: '', text: '实验评估', pos: t {} },
+  { id: '7', name: '', text: '总结展望', pos: t {} },
+  { id: '8', name: '', text: '总体框架：让每一步都保留可核对的证据', pos: t {} },
+  {
+    id: '9',
+    name: '',
+    text: 'LectureQA · DSC6021 Generative AI',
+    pos: t {}
+  },
+  { id: '10', name: '', text: '04', pos: t {} },
+  { id: '12', name: '', text: '① 按页保留来源', pos: t {} },
+  {
+    id: '13',
+    name: '',
+    text: '分块不跨页。\n文档ID、页码与原文片段\n贯穿检索和生成。',
+    pos: t {}
+  },
+  { id: '14', name: '', text: '② 按任务组织证据', pos: t {} },
+  {
+    id: '15',
+    name: '',
+    text: '普通问答按支持度门控。\n总结另采多页证据；\n外部补充需用户开启。',
+    pos: t {}
+  },
+  { id: '16', name: '', text: '③ 再校验引用', pos: t {} },
+  { id: '17', name: '', text: '仅保留本次证据集合中的\n页码与文档引用。', pos: t {} },
+  {
+    id: '18',
+    name: '',
+    text: '前端Streamlit、FastAPI与CLI共用服务装配线，避免不同入口出现不一致的来源规则。',
+    pos: t {}
+  }
+] IMAGES [ { id: '2', position: t {} }, { id: '11', position: t {} } ] TABLES 0
+SLIDE 9 SHAPES [
+  { id: '3', name: '', text: '研究背景', pos: t {} },
+  { id: '4', name: '', text: '系统方法', pos: t {} },
+  { id: '5', name: '', text: '产品实现', pos: t {} },
+  { id: '6', name: '', text: '实验评估', pos: t {} },
+  { id: '7', name: '', text: '总结展望', pos: t {} },
+  { id: '8', name: '', text: '检索配置对比：组合方案改善证据定位', pos: t {} },
+  {
+    id: '9',
+    name: '',
+    text: 'LectureQA · DSC6021 Generative AI',
+    pos: t {}
+  },
+  { id: '10', name: '', text: '09', pos: t {} },
+  { id: '12', name: '', text: '结果解读', pos: t {} },
+  {
+    id: '13',
+    name: '',
+    text: 'hit@6：0.919（原0.677）\n' +
+      '提高24.2个百分点。\n' +
+      'recall@6：0.887（原0.653）\n' +
+      '提高23.4个百分点。\n' +
+      'MRR：0.752（原0.504）\n' +
+      '首个正确页面排名更靠前。',
+    pos: t {}
+  },
+  { id: '14', name: '', text: '仍然存在的漏召回', pos: t {} },
+  {
+    id: '15',
+    name: '',
+    text: '62道可答题中5题未命中标准页，\n主要涉及中英术语不对齐\n与跨页综合问题。',
+    pos: t {}
+  },
+  {
+    id: '17',
+    name: '',
+    text: '历史结果，k=6，62道可答题；基线无重排，未隔离dense与coverage贡献，未检验显著性。',
+    pos: t {}
+  }
+] IMAGES [ { id: '2', position: t {} }, { id: '11', position: t {} } ] TABLES 1
+SLIDE 16 SHAPES [
+  { id: '3', name: '', text: '研究背景', pos: t {} },
+  { id: '4', name: '', text: '系统方法', pos: t {} },
+  { id: '5', name: '', text: '产品实现', pos: t {} },
+  { id: '6', name: '', text: '实验评估', pos: t {} },
+  { id: '7', name: '', text: '总结展望', pos: t {} },
+  { id: '8', name: '', text: '总结与分工：可核对的课程复习助手', pos: t {} },
+  {
+    id: '9',
+    name: '',
+    text: 'LectureQA · DSC6021 Generative AI',
+    pos: t {}
+  },
+  { id: '10', name: '', text: '16', pos: t {} },
+  { id: '12', name: '', text: '团队实际分工（提交前填姓名与贡献）', pos: t {} },
+  { id: '14', name: '', text: '谢谢聆听，欢迎提问', pos: t {} },
+  {
+    id: '15',
+    name: '',
+    text: 'github.com/Ji-Murray/Generative-AI',
+    pos: t {}
+  }
+] IMAGES [ { id: '2', position: t {} } ] TABLES 2

@@ -1,0 +1,11 @@
+Inspect result written to file: /Users/murrayji/generative ai/.codex-pptx-4min/build/candidate.pptx.inspect.ndjson
+file:///Users/murrayji/.codex/plugins/cache/openai-primary-runtime/presentations/26.1112.11217/skills/presentations/container_tools/artifact_tool_utils.mjs:269
+      throw new Error("An approved font family is not used in the supplied typography reference");
+            ^
+
+Error: An approved font family is not used in the supplied typography reference
+    at normalizePresentationFontPolicy (file:///Users/murrayji/.codex/plugins/cache/openai-primary-runtime/presentations/26.1112.11217/skills/presentations/container_tools/artifact_tool_utils.mjs:269:13)
+    at async finalizePresentation (file:///Users/murrayji/.codex/plugins/cache/openai-primary-runtime/presentations/26.1112.11217/skills/presentations/container_tools/artifact_tool_utils.mjs:861:22)
+    at async file:///Users/murrayji/generative%20ai/.codex-pptx-4min/build/build.mjs:118:14
+
+Node.js v24.22.1

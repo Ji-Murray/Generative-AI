@@ -170,9 +170,15 @@ QUIZ_SYSTEM = (
     "3. 用户给出的主题只表示复习范围提示，不要把主题字符串本身当成考点来考。\n"
     "4. 每道题都必须给出 sources，doc_id 与 page 必须原样取自 <evidence> 的标签行。\n"
     "5. 只输出一个 JSON 对象，不要 Markdown 围栏、不要任何解释性文字。\n"
-    "6. 题目语言与讲义语言保持一致。\n"
-    "7. 干扰项要合理但明确错误，不能出现两个正确选项；选项禁止写成页码（如第3页、p.5）。"
+    "6. 题干、选项、解析遵循下方语言规则；JSON 键、枚举值与来源标识保持不变。\n"
+    "7. 干扰项要合理但明确错误，不能出现两个正确选项；选项禁止写成页码（如第3页、p.5）。\n"
+    "8. {language}"
 )
+
+
+def quiz_system_prompt(language: str = "auto") -> str:
+    return QUIZ_SYSTEM.format(language=_LANGUAGE_RULE.get(language, _LANGUAGE_RULE["auto"]))
+
 
 QUIZ_USER = """<evidence>
 {evidence}
